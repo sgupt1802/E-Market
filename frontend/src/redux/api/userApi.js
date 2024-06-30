@@ -61,6 +61,15 @@ export const userApi = createApi({
                     body,
                 }
             },
+        }),
+        resetPassword:builder.mutation({
+            query({token,body}){
+                return {
+                    url:`/password/reset/${token}`,
+                    method:'PUT',
+                    body,
+                }
+            },
         })
     }),
 });
@@ -70,4 +79,5 @@ export const { useGetMeQuery,
     useUploadAvatarMutation, 
     useUpdatePasswordMutation,
     useForgotPasswordMutation,
+    useResetPasswordMutation,
 } = userApi;
