@@ -4,9 +4,13 @@ import { useGetProductDetailsQuery } from "../../redux/api/productsApi";
 import { toast } from "react-hot-toast";
 import Loader from "../layout/Loader";
 import StarRatings from "react-star-ratings";
+import { useDispatch } from "react-redux";
+import {setCartItem} from "../../redux/features/cartSlice"
 
 const ProductDetails = () => {
     const params = useParams();
+    const dispatch=useDispatch();
+
     const [quantity,setQuantity]=useState(1)
     const [activeImg, setActiveImg] = useState("");
 
@@ -56,11 +60,12 @@ const ProductDetails = () => {
             product:product?._id,
             name:product?.name,
             price:product?.price,
-            img:product?.img[0]?.url,
+            image:product?.images[0]?.url,
             stock:product?.stock,
             quantity,
 
-        }
+        };
+        dispatch(setCartItem(cartItem))
     }
 
     if (isLoading) return <Loader />;
@@ -125,7 +130,7 @@ const ProductDetails = () => {
                         type="number"
                         className="form-control count d-inline"
                         value={quantity}
-                        readonly
+                        readOnly
                     />
                     <span className="btn btn-primary plus" onClick={increaseQty}>+</span>
                 </div>
@@ -133,7 +138,8 @@ const ProductDetails = () => {
                     type="button"
                     id="cart_btn"
                     className="btn btn-primary d-inline ms-4"
-                    disabled=""
+                    disabled={product.stock<=0}
+                    onClick={setItemToCart}
                 >
                     Add to Cart
                 </button>
