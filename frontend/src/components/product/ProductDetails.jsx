@@ -66,6 +66,7 @@ const ProductDetails = () => {
 
         };
         dispatch(setCartItem(cartItem))
+        toast.success("Item added to Cart")
     }
 
     if (isLoading) return <Loader />;
