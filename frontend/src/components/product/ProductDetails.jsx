@@ -51,6 +51,18 @@ const ProductDetails = () => {
         setQuantity(qty)
     }
 
+    const setItemToCart=()=>{
+        const cartItem={
+            product:product?._id,
+            name:product?.name,
+            price:product?.price,
+            img:product?.img[0]?.url,
+            stock:product?.stock,
+            quantity,
+
+        }
+    }
+
     if (isLoading) return <Loader />;
 
     return (
