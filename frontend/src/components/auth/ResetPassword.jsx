@@ -3,7 +3,7 @@ import { useResetPasswordMutation } from '../../redux/api/userApi'
 import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
+import MetaData from '../layout/MetaData'
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('resetPassword')

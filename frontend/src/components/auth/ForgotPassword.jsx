@@ -3,7 +3,7 @@ import { useForgotPasswordMutation } from '../../redux/api/userApi'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-
+import MetaData from '../layout/MetaData'
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('')
