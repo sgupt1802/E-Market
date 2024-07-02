@@ -38,6 +38,8 @@ const ResetPassword = () => {
         resetPassword({token:params?.token, body:data});
     };
     return (
+        <>
+    <MetaData title={'Reset Password'}/>
         <div className="row wrapper">
             <div className="col-10 col-lg-5">
                 <form
@@ -78,7 +80,7 @@ const ResetPassword = () => {
                 </form>
             </div>
         </div>
-
+        </>
     )
 }
 

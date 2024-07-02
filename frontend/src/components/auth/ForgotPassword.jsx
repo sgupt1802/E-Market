@@ -31,6 +31,8 @@ const ForgotPassword = () => {
     };
 
     return (
+        <>
+    <MetaData title={'Forgot Password'}/>
         <div className="row wrapper">
             <div className="col-10 col-lg-5">
                 <form
@@ -61,6 +63,7 @@ const ForgotPassword = () => {
                 </form>
             </div>
         </div>
+        </>
     )
 }
 
