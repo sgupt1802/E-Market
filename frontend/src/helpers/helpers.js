@@ -14,7 +14,19 @@ export const getPriceQueryParams = (searchParams, key, value) => {
 
 
 export const calculateOrderCost=(cartItems)=>{
-  const itemsPrice=cartItems?.reduce(
-    (acc,item)=>acc+ item.price * item.quantity,0
-  )
+  const itemsPrice = Number(cartItems?.reduce(
+    (acc, item) => acc + item.price * item.quantity, 0
+  )).toFixed(2);
+  
+  const shippingPrice = Number(itemsPrice) > 200 ? 0 : 25;
+  const taxPrice = Number((0.15 * Number(itemsPrice)).toFixed(2));
+  const totalPrice = (Number(itemsPrice) + shippingPrice + taxPrice).toFixed(2);
+  
+  return {
+    itemsPrice,
+    shippingPrice,
+    taxPrice: taxPrice.toFixed(2),
+    totalPrice
+  };
+  
 }

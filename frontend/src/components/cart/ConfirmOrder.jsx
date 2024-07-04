@@ -1,10 +1,14 @@
 import React from 'react'
 import MetaData from '../layout/MetaData'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { calculateOrderCost } from '../../helpers/helpers'
+
 const ConfirmOrder = () => {
     const { cartItems, shippingInfo } = useSelector((state) => state.cart)
     const { user } = useSelector((state) => state.auth)
+    const { itemsPrice, shippingPrice, taxPrice, totalPrice } = calculateOrderCost(cartItems)
+
 
     return (
         <>
@@ -56,18 +60,18 @@ const ConfirmOrder = () => {
                     <div id="order_summary">
                         <h4>Order Summary</h4>
                         <hr />
-                        <p>Subtotal: <span className="order-summary-values">$1499.97</span></p>
-                        <p>Shipping: <span className="order-summary-values">$10.00</span></p>
-                        <p>Tax: <span className="order-summary-values">$150.00</span></p>
+                        <p>Subtotal: <span className="order-summary-values">${itemsPrice}</span></p>
+                        <p>Shipping: <span className="order-summary-values">${shippingPrice}</span></p>
+                        <p>Tax: <span className="order-summary-values">${taxPrice}</span></p>
 
                         <hr />
 
-                        <p>Total: <span className="order-summary-values">$1659.97</span></p>
+                        <p>Total: <span className="order-summary-values">${totalPrice}</span></p>
 
                         <hr />
-                        <a href="/payment" id="checkout_btn" className="btn btn-primary w-100">
+                        <Link to="/payment_method" id="checkout_btn" className="btn btn-primary w-100">
                             Proceed to Payment
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
