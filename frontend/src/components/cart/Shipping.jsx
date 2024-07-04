@@ -1,24 +1,48 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import {countries} from 'countries-list'
+import { useDispatch, useSelector } from 'react-redux'
+import { saveShippingInfo } from '../../redux/features/cartSlice'
+import { useNavigate } from 'react-router-dom'
+import MetaData from '../layout/MetaData'
 
 const Shipping = () => {
+
+    const dispatch=useDispatch()
+    const navigate=useNavigate()
     const [address,setAddress]=useState("")
     const [city,setCity]=useState("")
     const [zipCode,setZipCode]=useState("")
     const [phoneNo,setPhoneNo]=useState("")
     const [country,setCountry]=useState("")
 
+    const {shippingInfo}=useSelector((state)=>state.cart)
+
+    useEffect(()=>{
+        if(shippingInfo){
+            setAddress(shippingInfo?.address)
+            setCity(shippingInfo?.city)
+            setZipCode(shippingInfo?.zipCode)
+            setPhoneNo(shippingInfo?.phoneNo)
+            setCountry(shippingInfo?.country)
+        }
+    },[shippingInfo])
+
     const countriesList=Object.values(countries)
 
+    const submitHandler=(e)=>{
+        e.preventDefault()
 
+        dispatch(saveShippingInfo({address,city,phoneNo, zipCode,country}))
+        navigate('/confirm_order')
+    }
   return (  
     <>
+    <MetaData title={"Shipping Info"}/>
     <div className="row wrapper mb-5">
       <div className="col-10 col-lg-5">
         <form
           className="shadow rounded bg-body"
-          action="your_submit_url_here"
-          method="post"
+          onSubmit={submitHandler}
         >
           <h2 className="mb-4">Shipping Info</h2>
           <div className="mb-3">
