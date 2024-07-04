@@ -1,44 +1,53 @@
 import React from 'react'
 import MetaData from '../layout/MetaData'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 const ConfirmOrder = () => {
+    const { cartItems, shippingInfo } = useSelector((state) => state.cart)
+    const { user } = useSelector((state) => state.auth)
+
     return (
         <>
-            <MetaData title={"Confirm Order Info"}/>
+            <MetaData title={"Confirm Order Info"} />
 
             <div className="row d-flex justify-content-between">
                 <div className="col-12 col-lg-8 mt-5 order-confirm">
                     <h4 className="mb-3">Shipping Info</h4>
-                    <p><b>Name:</b> John Doe</p>
-                    <p><b>Phone:</b> 123-456-7890</p>
+                    <p><b>Name:</b>{user?.name}</p>
+                    <p><b>Phone:</b>{shippingInfo?.phoneNo}</p>
                     <p className="mb-4">
-                        <b>Address:</b> 123 Main St, Cityville, 12345, Country
+                        <b>Address:</b> {shippingInfo?.address},{shippingInfo?.city}, {shippingInfo?.zipCode}, {shippingInfo?.country}
                     </p>
 
                     <hr />
                     <h4 className="mt-4">Your Cart Items:</h4>
+                    {cartItems.map((item) => (
+                        <>
+                            <hr />
+                            <div className="cart-item my-1">
+                                <div className="row">
+                                    <div className="col-4 col-lg-2">
+                                        <img
+                                            src={item?.image}
+                                            alt="Laptop"
+                                            height="45"
+                                            width="65"
+                                        />
+                                    </div>
 
-                    <hr />
-                    <div className="cart-item my-1">
-                        <div className="row">
-                            <div className="col-4 col-lg-2">
-                                <img
-                                    src="../images/product.jpg"
-                                    alt="Laptop"
-                                    height="45"
-                                    width="65"
-                                />
-                            </div>
+                                    <div className="col-5 col-lg-6">
+                                        <Link to={`/products/${item?.product}`}>{item?.name}</Link>
+                                    </div>
 
-                            <div className="col-5 col-lg-6">
-                                <a href="#">Product 1</a>
+                                    <div className="col-4 col-lg-4 mt-4 mt-lg-0">
+                                        <p>3 x $499.99 = <b>$1499.97</b></p>
+                                    </div>
+                                </div>
                             </div>
+                            <hr />
+                        </>
+                    ))}
 
-                            <div className="col-4 col-lg-4 mt-4 mt-lg-0">
-                                <p>3 x $499.99 = <b>$1499.97</b></p>
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
                 </div>
 
                 <div className="col-12 col-lg-3 my-4">
