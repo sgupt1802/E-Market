@@ -1,7 +1,17 @@
-import React from 'react'
+import React,{useState} from 'react'
+import {countries} from 'countries-list'
 
 const Shipping = () => {
-  return (
+    const [address,setAddress]=useState("")
+    const [city,setCity]=useState("")
+    const [zipCode,setZipCode]=useState("")
+    const [phoneNo,setPhoneNo]=useState("")
+    const [country,setCountry]=useState("")
+
+    const countriesList=Object.values(countries)
+
+
+  return (  
     <>
     <div className="row wrapper mb-5">
       <div className="col-10 col-lg-5">
@@ -18,7 +28,8 @@ const Shipping = () => {
               id="address_field"
               className="form-control"
               name="address"
-              value=""
+              value={address}
+              onChange={(e)=> setAddress(e.target.value)}
               required
             />
           </div>
@@ -30,7 +41,8 @@ const Shipping = () => {
               id="city_field"
               className="form-control"
               name="city"
-              value=""
+              value={city}
+              onChange={(e)=> setCity(e.target.value)}
               required
             />
           </div>
@@ -42,21 +54,24 @@ const Shipping = () => {
               id="phone_field"
               className="form-control"
               name="phoneNo"
-              value=""
+              value={phoneNo}
+              onChange={(e)=> setPhoneNo(e.target.value)}
               required
             />
           </div>
 
           <div className="mb-3">
-            <label htmlFor="postal_code_field" className="form-label"
-              >Postal Code</label
-            >
+            <label htmlFor="zip_code_field" className="form-label"
+              >Zip Code
+
+              </label>
             <input
               type="number"
-              id="postal_code_field"
+              id="zip_code_field"
               className="form-control"
-              name="postalCode"
-              value=""
+              name="zipCode"
+              value={zipCode}
+              onChange={(e)=> setZipCode(e.target.value)}
               required
             />
           </div>
@@ -67,11 +82,13 @@ const Shipping = () => {
               id="country_field"
               className="form-select"
               name="country"
+              value={country}
+              onChange={(e)=>setCountry(e.target.value)}
               required
             >
-      
-              <option value="Country1">Country1</option>
-              <option value="Country2">Country2</option>
+                {countriesList.map((country)=>(
+                     <option key={country?.name} value={country?.name}>{country?.name}</option>
+                ))}
               
             </select>
           </div>
