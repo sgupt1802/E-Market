@@ -1,7 +1,7 @@
 import React from 'react'
 import MetaData from '../layout/MetaData'
 import { useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { calculateOrderCost } from '../../helpers/helpers'
 import CheckoutSteps from './CheckoutSteps'
 
