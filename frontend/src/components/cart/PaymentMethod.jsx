@@ -1,14 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MetaData from '../layout/MetaData'
 import { useSelector } from 'react-redux'
 import CheckoutSteps from './CheckoutSteps'
 import { calculateOrderCost } from '../../helpers/helpers'
+import { useCreateNewOrderMutation } from '../../redux/api/orderApi'
+import {toast} from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 
 const PaymentMethod = () => {
     const [method,setMethod]=useState("")
     const {shippingInfo,cartItems}=useSelector((state)=>state.cart)
+    const [createNewOrder, {isLoading,error,isSuccess}]=useCreateNewOrderMutation()
     const { itemsPrice, shippingPrice, taxPrice, totalPrice } = calculateOrderCost(cartItems)
+    const navigate=useNavigate()
+    useEffect(()=>{
+        if(error){
+            toast.error(error?.data?.message)
+        }
+        if(isSuccess){
+            navigate("/")
+        }
+    },[error,isSuccess])
     const submitHandler=(e)=>{
         e.preventDefault();
 
@@ -17,12 +30,16 @@ const PaymentMethod = () => {
             const orderData={
                 shippingInfo,
                 orderItems:cartItems,
-                itemsPrice, shippingPrice, taxPrice, totalPrice,
+                itemsPrice, 
+            shippingAmount:shippingPrice, 
+            taxAmount:taxPrice, 
+            totalAmount:totalPrice,
                 paymentInfo:{
                     status:"Not Paid"
                 },
                 paymentMethod:"COD"
             }
+            createNewOrder(orderData)
         }
 
         if(method==="Card"){
