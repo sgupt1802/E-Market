@@ -2,16 +2,27 @@ import React, { useState } from 'react'
 import MetaData from '../layout/MetaData'
 import { useSelector } from 'react-redux'
 import CheckoutSteps from './CheckoutSteps'
+import { calculateOrderCost } from '../../helpers/helpers'
 
 
 const PaymentMethod = () => {
     const [method,setMethod]=useState("")
+    const {shippingInfo,cartItems}=useSelector((state)=>state.cart)
+    const { itemsPrice, shippingPrice, taxPrice, totalPrice } = calculateOrderCost(cartItems)
     const submitHandler=(e)=>{
         e.preventDefault();
 
         if(method==="COD"){
             //Create COD order
-            
+            const orderData={
+                shippingInfo,
+                orderItems:cartItems,
+                itemsPrice, shippingPrice, taxPrice, totalPrice,
+                paymentInfo:{
+                    status:"Not Paid"
+                },
+                paymentMethod:"COD"
+            }
         }
 
         if(method==="Card"){
