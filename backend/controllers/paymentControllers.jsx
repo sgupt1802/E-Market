@@ -18,7 +18,8 @@ export const stripeCheckoutSession=catchAsyncErrors(
                     },
                     unit_amount:item?.price * 100
                 },
-                tax_rates:[""]
+                tax_rates:["txr_1PZdewSFrwBJ9KLtH83qbZAX"],
+                quantity:item?.quantity,
             }
         })
         const session=await stripe.checkout.session.create({
@@ -32,6 +33,11 @@ export const stripeCheckoutSession=catchAsyncErrors(
                 {
                     shipping_rate
                 }
-            ]
+            ],
+            lineItems,
         });
+
+        res.status(200)?.json({
+            url:session.url
+        })
 })
