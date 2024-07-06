@@ -1,0 +1,1 @@
+// Creating the stripe checkout session => /api/v1/payment/checkout_session
