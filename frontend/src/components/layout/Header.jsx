@@ -23,6 +23,7 @@ const Header = () => {
       console.error('Logout failed: ', error);
     }
   };
+
   return (
     <nav className="navbar row">
       <div className="col-12 col-md-3 ps-5">
