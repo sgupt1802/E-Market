@@ -1,7 +1,7 @@
 import express from "express";
 
 import {isAuthenticatedUser } from "../middlewares/auth.js"
-import { stripeCheckoutSession } from "../controllers/paymentControllers.jsx";
+import { stripeCheckoutSession } from "../controllers/paymentControllers.js";
 
 const router = express.Router();
 
