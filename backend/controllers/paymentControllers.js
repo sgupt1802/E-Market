@@ -5,6 +5,7 @@ const stripe=Stripe(process.env.STRIPE_SECRET_KEY)
 export const stripeCheckoutSession=catchAsyncErrors(
     async(req,res,next)=>{
         const body=req?.body
+        const shippingInfo=body?.shippingInfo
         const shipping_rate=body?.itemsPrice > 200 ? "shr_1PZdS6SFrwBJ9KLtXJC6DNCM" :  "shr_1PZdSlSFrwBJ9KLtYTLNN6Zf"
         const lineItems=body?.orderItems?.map((item)=>{
             return {
@@ -29,6 +30,7 @@ export const stripeCheckoutSession=catchAsyncErrors(
             customer_email:req?.user?.email,
             client_reference_id:req?.user?._id?.toString(),
             mode:'payment',
+            metadata:{...shippingInfo,itemsPrice:body?.itemsPrice},
             shipping_options:[
                 {
                     shipping_rate
