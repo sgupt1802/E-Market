@@ -1,45 +1,51 @@
 // Creating the stripe checkout session => /api/v1/payment/checkout_session
 import catchAsyncErrors from "../middlewares/catchAsyncErrors.js";
 import Stripe from "stripe";
-const stripe=Stripe(process.env.STRIPE_SECRET_KEY)
-export const stripeCheckoutSession=catchAsyncErrors(
-    async(req,res,next)=>{
-        const body=req?.body
-        const shippingInfo=body?.shippingInfo
-        const shipping_rate=body?.itemsPrice > 200 ? "shr_1PZdS6SFrwBJ9KLtXJC6DNCM" :  "shr_1PZdSlSFrwBJ9KLtYTLNN6Zf"
-        const lineItems=body?.orderItems?.map((item)=>{
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY)
+
+export const stripeCheckoutSession = catchAsyncErrors(
+    async (req, res, next) => {
+
+        const body = req?.body
+
+        const shippingInfo = body?.shippingInfo
+
+        const shipping_rate = body?.itemsPrice >= 200 ? "shr_1PZdS6SFrwBJ9KLtXJC6DNCM" : "shr_1PZdSlSFrwBJ9KLtYTLNN6Zf"
+
+        const line_items = body?.orderItems?.map((item) => {
             return {
-                price_data:{
+                price_data: {
                     currency: "inr",
-                    product_data:{
+                    product_data: {
                         name: item?.name,
-                        images:[item?.name],
-                        metadata:{productId:item?.product},
+                        images: [item?.image],
+                        metadata: { productId: item?.product },
 
                     },
-                    unit_amount:item?.price * 100
+                    unit_amount: item?.price * 100
                 },
-                tax_rates:["txr_1PZdewSFrwBJ9KLtH83qbZAX"],
-                quantity:item?.quantity,
+                tax_rates: ["txr_1PZdewSFrwBJ9KLtH83qbZAX"],
+                quantity: item?.quantity,
             }
         })
-        const session=await stripe.checkout.session.create({
-            payment_method_types:['card'],
-            success_url:`${process.env.FRONTEND_URL}/me/orders`,
-            cancel_url:`${process.env.FRONTEND_URL}`,
-            customer_email:req?.user?.email,
-            client_reference_id:req?.user?._id?.toString(),
-            mode:'payment',
-            metadata:{...shippingInfo,itemsPrice:body?.itemsPrice},
-            shipping_options:[
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            success_url: `${process.env.FRONTEND_URL}/me/orders`,
+            cancel_url: `${process.env.FRONTEND_URL}`,
+            customer_email: req?.user?.email,
+            client_reference_id: req?.user?._id?.toString(),
+            mode: 'payment',
+            metadata: { ...shippingInfo, itemsPrice: body?.itemsPrice },
+            shipping_options: [
                 {
                     shipping_rate
                 }
             ],
-            lineItems,
+            line_items,
         });
 
         res.status(200)?.json({
-            url:session.url
+            url: session.url
         })
-})
+    })
