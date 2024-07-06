@@ -23,13 +23,12 @@ const Header = () => {
       console.error('Logout failed: ', error);
     }
   };
-
   return (
     <nav className="navbar row">
       <div className="col-12 col-md-3 ps-5">
         <div className="navbar-brand">
           <a href="/">
-            <img src="/images/shopit_logo.png" alt="ShopIT Logo" />
+            <img src="/images/E-Market_logo.png" alt="E-Market Logo" />
           </a>
         </div>
       </div>
