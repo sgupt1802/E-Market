@@ -14,9 +14,11 @@ export const stripeCheckoutSession=catchAsyncErrors(
                         name: item?.name,
                         images:[item?.name],
                         metadata:{productId:item?.product},
-                        
-                    } 
-                }
+
+                    },
+                    unit_amount:item?.price * 100
+                },
+                tax_rates:[""]
             }
         })
         const session=await stripe.checkout.session.create({
