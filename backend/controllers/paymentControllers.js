@@ -49,3 +49,38 @@ export const stripeCheckoutSession = catchAsyncErrors(
             url: session.url
         })
     })
+
+
+const getOrderItems=async()
+
+//create new order after payment => api/v1/payment/webhook
+
+export const stripeWebhook = catchAsyncErrors(
+    async (req, res, next) => {
+        try {
+
+            const signature = req.headers['stripe-signature']
+            const event = stripe.webhooks.constructEvent(
+                req.rawBody,
+                signature,
+                process.env.STRIPE_WEBHOOK_SECRET
+            );
+
+            if (event.type === 'checkout.session.completed') {
+                const session = event.data.object
+                const line_items=await stripe.chechout.sessions.listLineItems(session.id)
+
+                const orderItems=await getOrderItems(line_items)
+                res.status(200).json({
+                    success:true
+                })
+            }
+
+
+        } catch (error) {
+            console.log("===============================================")
+            console.log("Error=> ", error);
+            console.log("===============================================")
+
+        }
+    })
