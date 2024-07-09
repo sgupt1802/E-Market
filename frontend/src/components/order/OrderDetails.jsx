@@ -19,6 +19,7 @@ const OrderDetails = () => {
       }, [error]); 
 
       if(isLoading) return <Loader/>;
+      const orderLink=`/invoice/order/${order?._id}`
 
   return (
     <>
@@ -27,7 +28,7 @@ const OrderDetails = () => {
       <div className="col-12 col-lg-9 mt-5 order-details">
         <div className="d-flex justify-content-between align-items-center">
           <h3 className="mt-5 mb-4">Your Order Details</h3>
-          <a className="btn btn-success" href="/invoice/order/order-id">
+          <a className="btn btn-success" href={orderLink}>
             <i className="fa fa-print"></i> Invoice
           </a>
         </div>
@@ -83,7 +84,7 @@ const OrderDetails = () => {
           <tr>
                 <th scope="row">Status</th>
                 <td className={isPaid ? "greenColor" : "redColor"}>
-                  <b>{paymentInfo?.status}</b>
+                  <b>{paymentInfo?.status.toUpperCase()}</b>
                 </td>
               </tr>
             <tr>

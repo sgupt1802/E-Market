@@ -74,7 +74,7 @@ const Invoice = () => {
                                 {shippingInfo?.zipCode}, {shippingInfo?.country}
                             </div>
                             <div><span>DATE</span> {new Date(order?.createdAt).toLocaleString("en-IN")}</div>
-                            <div><span>Status</span>{paymentInfo?.status}</div>
+                            <div><span>Status</span>{paymentInfo?.status.toUpperCase()}</div>
                         </div>
                     </header>
                     <main>
