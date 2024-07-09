@@ -1,17 +1,14 @@
 import React, { useEffect } from 'react'
 import { useMyOrdersQuery } from '../../redux/api/orderApi'
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+
 import toast from 'react-hot-toast';
 import Loader from "../layout/Loader"
 import {MDBDataTable} from 'mdbreact'
 import { Link } from "react-router-dom";
+import MetaData from "../layout/MetaData"
 
 const MyOrders = () => {
     const {data, isLoading,error}=useMyOrdersQuery()
-
-    
-
     useEffect(() => {
         if (error) {
           toast.error(error?.data?.message)
@@ -80,6 +77,7 @@ const MyOrders = () => {
 
   return (
     <>
+     <MetaData title={"My Orders"}/>
     <div>
         <h1 className="my-5">{data?.orders?.length} Orders</h1>
     </div>

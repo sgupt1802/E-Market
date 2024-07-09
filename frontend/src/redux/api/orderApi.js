@@ -6,28 +6,31 @@ export const orderApi = createApi({
   endpoints: (builder) => ({
     createNewOrder: builder.mutation({
       query(body) {
-        return{
-            url:"/orders/new",
-            method:"POST",
-            body,
+        return {
+          url: "/orders/new",
+          method: "POST",
+          body,
         }
       }
     }),
     myOrders: builder.query({
-      query: () =>`/me/orders`,
-        }),
-    
-    
+      query: () => `/me/orders`,
+    }),
+    orderDetails: builder.query({
+      query: (id) => `/orders/${id}`,
+    }),
+
+
     stripeCheckoutSession: builder.mutation({
       query(body) {
-        return{
-            url:"/payment/checkout_session",
-            method:"POST",
-            body,
+        return {
+          url: "/payment/checkout_session",
+          method: "POST",
+          body,
         }
       }
     }),
   }),
 });
 
-export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation,useMyOrdersQuery } = orderApi;
+export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation, useMyOrdersQuery,useOrderDetailsQuery } = orderApi;
