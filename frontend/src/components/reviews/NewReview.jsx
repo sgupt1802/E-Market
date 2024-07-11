@@ -1,11 +1,25 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import StarRatings from "react-star-ratings";
-const NewReview = () => {
+import { useSubmitReviewMutation } from '../../redux/api/productsApi';
+import toast from 'react-hot-toast';
+const NewReview = ({productId}) => {
     const [rating,setRating]=useState(0)
     const [comment,setComment]=useState("")
 
-    const submitHandler=()=>{
+    const [submitReview, {isLoading,error,isSuccess}]=useSubmitReviewMutation()
+        useEffect(() => {
+        if (error) {
+            toast.error(error?.data?.message);
+        }
 
+        if(isSuccess){
+            toast.success("Review Posted")
+        }
+    }, [error,isSuccess]);
+
+    const submitHandler=()=>{
+        const reviewData={rating,comment, productId}
+        submitReview(reviewData)
     }
     return (
         <>
