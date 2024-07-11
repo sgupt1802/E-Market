@@ -12,6 +12,7 @@ const NewReview = ({productId}) => {
             toast.error(error?.data?.message);
         }
 
+        //isLoading will not be used here
         if(isSuccess){
             toast.success("Review Posted")
         }
