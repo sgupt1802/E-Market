@@ -159,3 +159,17 @@ export const deleteReview = catchAsyncErrors(async (req, res, next) => {
       product,
     });
   });
+
+  // Can user review => api/v1/can_review
+export const canUserReview = catchAsyncErrors(async (req, res) => {
+    let product = await Product.findById(req?.params?.id);
+
+    if (!product) {
+        return next(new ErrorHandler("Product not found", 404));
+    }
+
+    product = await Product.findByIdAndUpdate(req?.params?.id, req.body, { new: true });
+    res.status(200).json({
+        product,
+    })
+});
