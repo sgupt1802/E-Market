@@ -170,8 +170,8 @@ export const canUserReview = catchAsyncErrors(async (req, res) => {
     })
 
     if(orders.length ===0){
-        return res.status(200).json({canReviewed:false})
+        return res.status(200).json({canReview:false})
     }
 
-    res.status(200).json({canReviewed:true})
+    res.status(200).json({canReview:true})
 });

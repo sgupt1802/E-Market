@@ -1,39 +1,48 @@
-import React,{useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import StarRatings from "react-star-ratings";
-import { useSubmitReviewMutation } from '../../redux/api/productsApi';
+import { useCanUserReviewQuery, useSubmitReviewMutation } from '../../redux/api/productsApi';
 import toast from 'react-hot-toast';
-const NewReview = ({productId}) => {
-    const [rating,setRating]=useState(0)
-    const [comment,setComment]=useState("")
+const NewReview = ({ productId }) => {
+    const [rating, setRating] = useState(0)
+    const [comment, setComment] = useState("")
 
-    const [submitReview, {isLoading,error,isSuccess}]=useSubmitReviewMutation()
-        useEffect(() => {
+    const [submitReview, { isLoading, error, isSuccess }] = useSubmitReviewMutation()
+
+    const { data } = useCanUserReviewQuery()
+    const canReview = data?.canReview
+
+
+
+    useEffect(() => {
         if (error) {
             toast.error(error?.data?.message);
         }
 
         //isLoading will not be used here
-        if(isSuccess){
+        if (isSuccess) {
             toast.success("Review Posted")
         }
-    }, [error,isSuccess]);
+    }, [error, isSuccess]);
 
-    const submitHandler=()=>{
-        const reviewData={rating,comment, productId}
+    const submitHandler = () => {
+        const reviewData = { rating, comment, productId }
         submitReview(reviewData)
     }
     return (
         <>
             <div>
-                <button
-                    id="review_btn"
-                    type="button"
-                    className="btn btn-primary mt-4"
-                    data-bs-toggle="modal"
-                    data-bs-target="#ratingModal"
-                >
-                    Submit Your Review
-                </button>
+                {canReview && (
+                    <button
+                        id="review_btn"
+                        type="button"
+                        className="btn btn-primary mt-4"
+                        data-bs-toggle="modal"
+                        data-bs-target="#ratingModal"
+                    >
+                        Submit Your Review
+                    </button>
+                )}
+
 
                 <div className="row mt-2 mb-5">
                     <div className="rating w-50">
@@ -64,7 +73,7 @@ const NewReview = ({productId}) => {
                                             starRatedColor="#ffb829"
                                             numberOfStars={5}
                                             name="rating"
-                                            changeRating={(e)=>setRating(e)}
+                                            changeRating={(e) => setRating(e)}
                                         />
 
                                         <textarea
@@ -73,7 +82,7 @@ const NewReview = ({productId}) => {
                                             className="form-control mt-4"
                                             placeholder="Enter your comment"
                                             value={comment}
-                                            onChange={(e)=>setComment(e.target.value)}
+                                            onChange={(e) => setComment(e.target.value)}
                                         ></textarea>
 
                                         <button
