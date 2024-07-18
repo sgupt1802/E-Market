@@ -3,31 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 
 
 
-const SideMenu = () => {
-    const menuItems = [
-        {
-            name: 'Profile',
-            url: '/me/profile',
-            icon: 'fas fa-user'
-        },
-        {
-            name: 'Update Profile',
-            url: '/me/update_profile',
-            icon: 'fas fa-user'
-        },
-        {
-            name: 'Update Avatar',
-            url: '/me/upload_avatar',
-            icon: 'fas fa-user-circle'
-        },
-        {
-            name: 'Update Password',
-            url: '/me/update_password',
-            icon: 'fas fa-lock'
-        },
-    ];
+const SideMenu = ({menuItems}) => {
 
-    const handleMenuItemClick=(menuItemuUrl)=>{
+    const handleMenuItemClick = (menuItemuUrl) => {
         setActivemenuItem(menuItemuUrl)
     }
     const location = useLocation()
@@ -40,7 +18,7 @@ const SideMenu = () => {
                     key={index}
                     to={menuItem.url}
                     className={`fw-bold list-group-item list-group-item-action ${activeMenuItem.includes(menuItem.url) ? "active" : ""} `}
-                    onClick={()=>handleMenuItemClick(menuItem.url)}
+                    onClick={() => handleMenuItemClick(menuItem.url)}
                     aria-current={activeMenuItem.includes(menuItem.url) ? "true" : "false"}
                 >
 

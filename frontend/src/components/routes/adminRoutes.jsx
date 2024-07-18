@@ -6,7 +6,7 @@ const adminRoutes = () => {
     return (
         <>
             <Route path="/admin/dashboard" element={
-                <ProtectedRoute>
+                <ProtectedRoute admin={true}>
                     <Dashboard/>
                 </ProtectedRoute>
             } />
