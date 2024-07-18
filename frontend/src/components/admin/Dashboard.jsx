@@ -7,6 +7,10 @@ import "react-datepicker/dist/react-datepicker.css";
 const Dashboard = () => {
     const [startDate, setStartDate] = useState(new Date().setDate(1));
     const [endDate, setEndDate] = useState(new Date());
+
+    const submitHandler=()=>{
+        
+    }
     return (
         <AdminLayout>
             <div className="d-flex justify-content-start align-items-center">
