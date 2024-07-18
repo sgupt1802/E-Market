@@ -59,14 +59,14 @@ export default function SalesChart({ salesData }) {
         datasets: [
             {
                 label: "Sales",
-                data: [13, 54, 84, 42, 54, 66, 89, 9],
+                data: salesData?.map((data) => data?.sales),
                 borderColor: "#198753",
                 backgroundColor: "rgba(42, 117, 83, 0.5)",
                 yAxisID: "y",
             },
             {
                 label: "Orders",
-                data: [12, 5, 8, 4, 5, 66, 89, 9],
+                data: salesData?.map((data) => data?.numOrders),
                 borderColor: "rgb(220, 52, 69)",
                 backgroundColor: "rgba(201, 68, 82, 0.5)",
                 yAxisID: "y1",

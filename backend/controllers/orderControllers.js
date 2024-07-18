@@ -116,7 +116,7 @@ async function getSalesData(startDate, endDate) {
             $match: {
                 createdAt: {
                     $gte: new Date(startDate),
-                    $lte: new Date(endDate) 
+                    $lte: new Date(endDate)
                 }
             }
         },
@@ -126,48 +126,48 @@ async function getSalesData(startDate, endDate) {
                 _id: {
                     date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }
                 },
-                totalSales:{ $sum: "$totalAmount"},
-                numOrders:{$sum:1},          //count the number of order
+                totalSales: { $sum: "$totalAmount" },
+                numOrders: { $sum: 1 }, // count the number of orders
             },
         },
     ]);
 
     //Create a Map to store the sales data and num of order by data
-    const salesMap=new Map();
-    let totalSales=0;
-    let totalNumOrders=0;
+    const salesMap = new Map();
+    let totalSales = 0;
+    let totalNumOrders = 0;
 
-    salesData.forEach((entry)=>{
-        const date=entry?._id.date
-        const sales=entry?.totalSales
-        const numOrders=entry?.numOrders
+    salesData.forEach((entry) => {
+        const date = entry?._id.date;
+        const sales = entry?.totalSales;
+        const numOrders = entry?.numOrders;
 
-        salesMap.set(date,{sales,numOrders})
-        totalSales+=salesMap
-        totalNumOrders+=numOrders
+        salesMap.set(date, { sales, numOrders });
+        totalSales += sales;
+        totalNumOrders += numOrders;
     })
 
     //Generate array of dates between start and end dates
-    const datesBetween=getDatesBetween(startDate,endDate)
+    const datesBetween = getDatesBetween(startDate, endDate)
 
     //create final sales data array with 0 for dates without sales
-    const finalSalesData=datesBetween.map((date)=>({
+    const finalSalesData = datesBetween.map((date) => ({
         date,
-        sales:(salesMap.get(date) || {sales:0}).sales,
-        numOrders:(salesMap.get(date) || {numOrders:0}).numOrders
+        sales: (salesMap.get(date) || { sales: 0 }).sales,
+        numOrders: (salesMap.get(date) || { numOrders: 0 }).numOrders,
     }));
 
-    return {salesData:finalSalesData,totalSales,totalNumOrders}
+    return { salesData: finalSalesData, totalSales, totalNumOrders };
 }
 
-function getDatesBetween(startDate,endDate){
-    const dates=[]
-    let currentDate=new Date(startDate)
+function getDatesBetween(startDate, endDate) {
+    const dates = [];
+    let currentDate = new Date(startDate);
 
-    while(currentDate<=new Date(endDate)){
-        const formattedDate=currentDate.toISOString().split("T")[0]
-        dates.push(formattedDate)
-        currentDate.setDate(currentDate.getDate()+1)
+    while (currentDate <= new Date(endDate)) {
+        const formattedDate = currentDate.toISOString().split("T")[0];
+        dates.push(formattedDate);
+        currentDate.setDate(currentDate.getDate() + 1);
     }
 
     return dates;
@@ -176,18 +176,19 @@ function getDatesBetween(startDate,endDate){
 // Get Sales Data=>/api/v1/admin/get_sales
 export const getSales = catchAsyncErrors(async (req, res, next) => {
 
-    const startDate = new Date(req.query.startDate)
-    const endDate = new Date(req.query.endDate)
+    const startDate = new Date(req.query.startDate);
+    const endDate = new Date(req.query.endDate);
 
 
-    startDate.setUTCHours(0, 0, 0, 0)
-    endDate.setUTCHours(23, 59, 59, 999)
 
-    const {salesData,totalSales,totalNumOrders}=await getSalesData(startDate,endDate)
+    startDate.setUTCHours(0, 0, 0, 0);
+    endDate.setUTCHours(23, 59, 59, 999);
+
+    const { salesData, totalSales, totalNumOrders } = await getSalesData(startDate, endDate)
 
     res.status(200).json({
         totalSales,
         totalNumOrders,
-        sales:salesData,
+        sales: salesData,
     })
 })
