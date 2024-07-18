@@ -21,7 +21,7 @@ import Invoice from "../invoice/Invoice";
 
 const userRoutes = () => {
   return (
-    <div>
+    <>
         <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/login" element={<Login />} />
@@ -87,7 +87,7 @@ const userRoutes = () => {
                 <Invoice/>
               </ProtectedRoute>} />
 
-    </div>
+    </>
   )
 }
 
