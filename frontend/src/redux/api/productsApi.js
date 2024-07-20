@@ -33,7 +33,7 @@ export const productApi = createApi({
       invalidatesTags: ['Product']
     }),
     canUserReview: builder.query({
-      query: (productId) => `/can_review/?productId=${productId}`,
+      query: (productId) => `/can_review/productId=${productId}`,
     }),
     getAdminProducts: builder.query({
       query: () => `/admin/products`,
@@ -79,6 +79,16 @@ export const productApi = createApi({
       },
       invalidatesTags: ["Product"],
     }),
+    
+    deleteProduct: builder.mutation({
+      query(id) {
+        return {
+          url: `/admin/products/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["AdminProducts"],
+    }),
   }),
 });
 
@@ -92,4 +102,5 @@ export const {
   useUpdateProductMutation,
   useUploadProductImagesMutation,
   useDeleteProductImageMutation,
+  useDeleteProductMutation,
 } = productApi;

@@ -5,197 +5,203 @@ import MetaData from "../layout/MetaData";
 import AdminLayout from "../layout/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  useDeleteProductImageMutation,
-  useGetProductDetailsQuery,
-  useUploadProductImagesMutation,
+    useDeleteProductImageMutation,
+    useGetProductDetailsQuery,
+    useUploadProductImagesMutation,
 } from "../../redux/api/productsApi";
 
 const UploadImages = () => {
-  const fileInputRef = useRef(null);
-  const params = useParams();
-  const navigate = useNavigate();
+    const fileInputRef = useRef(null);
+    const params = useParams();
+    const navigate = useNavigate();
 
-  const [images, setImages] = useState([]);
-  const [imagesPreview, setImagesPreview] = useState([]);
-  const [uploadedImages, setUploadedImages] = useState([]);
+    const [images, setImages] = useState([]);
+    const [imagesPreview, setImagesPreview] = useState([]);
+    const [uploadedImages, setUploadedImages] = useState([]);
 
-  const [uploadProductImages, { isLoading, error, isSuccess }] =
-    useUploadProductImagesMutation();
+    const [uploadProductImages, { isLoading, error, isSuccess }] =
+        useUploadProductImagesMutation();
 
-  const [
-    deleteProductImage,
-    { isLoading: isDeleteLoading, error: deleteError },
-  ] = useDeleteProductImageMutation();
+    const [
+        deleteProductImage,
+        { isLoading: isDeleteLoading, error: deleteError,isSuccess:deleteSuccess },
+    ] = useDeleteProductImageMutation();
 
-  const { data } = useGetProductDetailsQuery(params?.id);
+    const { data } = useGetProductDetailsQuery(params?.id);
 
-  useEffect(() => {
-    if (data?.product) {
-      setUploadedImages(data?.product?.images);
-    }
-
-    if (error) {
-      toast.error(error?.data?.message);
-    }
-
-    if (deleteError) {
-      toast.error(deleteError?.data?.message);
-    }
-
-    if (isSuccess) {
-      setImagesPreview([]);
-      toast.success("Images Uploaded");
-      navigate("/admin/products");
-    }
-  }, [data, error, isSuccess, deleteError]);
-
-  const onChange = (e) => {
-    const files = Array.from(e.target.files);
-
-    files.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImagesPreview((oldArray) => [...oldArray, reader.result]);
-          setImages((oldArray) => [...oldArray, reader.result]);
+    useEffect(() => {
+        if (data?.product) {
+            setUploadedImages(data?.product?.images);
         }
-      };
 
-      reader.readAsDataURL(file);
-    });
-  };
+        if (error) {
+            console.log(error)
+            toast.error(error?.data?.message);
+        }
 
-  const handleResetFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
+        if (deleteError) {
+            console.log(deleteError)
+            toast.error(deleteError?.data?.message);
+        }
 
-  const handleImagePreviewDelete = (image) => {
-    const filteredImagesPreview = imagesPreview.filter((img) => img !== image);
+        if(deleteSuccess){
+            toast.success('Image Deleted')
+        }
 
-    setImages(filteredImagesPreview);
-    setImagesPreview(filteredImagesPreview);
-  };
+        if (isSuccess) {
+            setImagesPreview([]);
+            toast.success("Images Uploaded");
+            navigate("/admin/products");
+        }
+    }, [data, error, isSuccess,navigate, deleteError]);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+    const onChange = (e) => {
+        const files = Array.from(e.target.files);
 
-    uploadProductImages({ id: params?.id, body: { images } });
-  };
+        files.forEach((file) => {
+            const reader = new FileReader();
 
-  const deleteImage = (imgId) => {
-    deleteProductImage({ id: params?.id, body: { imgId } });
-  };
+            reader.onload = () => {
+                if (reader.readyState === 2) {
+                    setImagesPreview((oldArray) => [...oldArray, reader.result]);
+                    setImages((oldArray) => [...oldArray, reader.result]);
+                }
+            };
 
-  return (
-    <AdminLayout>
-      <MetaData title={"Upload Product Images"} />
-      <div className="row wrapper">
-        <div className="col-10 col-lg-8 mt-5 mt-lg-0">
-          <form
-            className="shadow rounded bg-body"
-            enctype="multipart/form-data"
-            onSubmit={submitHandler}
-          >
-            <h2 className="mb-4">Upload Product Images</h2>
+            reader.readAsDataURL(file);
+        });
+    };
 
-            <div className="mb-3">
-              <label htmlFor="customFile" className="form-label">
-                Choose Images
-              </label>
+    const handleResetFileInput = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
 
-              <div className="custom-file">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  name="product_images"
-                  className="form-control"
-                  id="customFile"
-                  multiple
-                  onChange={onChange}
-                  onClick={handleResetFileInput}
-                />
-              </div>
+    const handleImagePreviewDelete = (image) => {
+        const filteredImagesPreview = imagesPreview.filter((img) => img !== image);
 
-              {imagesPreview?.length > 0 && (
-                <div className="new-images my-4">
-                  <p className="text-warning">New Images:</p>
-                  <div className="row mt-4">
-                    {imagesPreview?.map((img) => (
-                      <div className="col-md-3 mt-2">
-                        <div className="card">
-                          <img
-                            src={img}
-                            alt="Card"
-                            className="card-img-top p-2"
-                            style={{ width: "100%", height: "80px" }}
-                          />
-                          <button
-                            style={{
-                              backgroundColor: "#dc3545",
-                              borderColor: "#dc3545",
-                            }}
-                            type="button"
-                            className="btn btn-block btn-danger cross-button mt-1 py-0"
-                            onClick={() => handleImagePreviewDelete(img)}
-                          >
-                            <i className="fa fa-times"></i>
-                          </button>
+        setImages(filteredImagesPreview);
+        setImagesPreview(filteredImagesPreview);
+    };
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+
+        uploadProductImages({ id: params?.id, body: { images } });
+    };
+
+    const deleteImage = (imgId) => {
+        deleteProductImage({ id: params?.id, body: { imgId } });
+    };
+
+    return (
+        <AdminLayout>
+            <MetaData title={"Upload Product Images"} />
+            <div className="row wrapper">
+                <div className="col-10 col-lg-8 mt-5 mt-lg-0">
+                    <form
+                        className="shadow rounded bg-body"
+                        enctype="multipart/form-data"
+                        onSubmit={submitHandler}
+                    >
+                        <h2 className="mb-4">Upload Product Images</h2>
+
+                        <div className="mb-3">
+                            <label htmlFor="customFile" className="form-label">
+                                Choose Images
+                            </label>
+
+                            <div className="custom-file">
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    name="product_images"
+                                    className="form-control"
+                                    id="customFile"
+                                    multiple
+                                    onChange={onChange}
+                                    onClick={handleResetFileInput}
+                                />
+                            </div>
+
+                            {imagesPreview?.length > 0 && (
+                                <div className="new-images my-4">
+                                    <p className="text-warning">New Images:</p>
+                                    <div className="row mt-4">
+                                        {imagesPreview?.map((img) => (
+                                            <div className="col-md-3 mt-2">
+                                                <div className="card">
+                                                    <img
+                                                        src={img}
+                                                        alt="Card"
+                                                        className="card-img-top p-2"
+                                                        style={{ width: "100%", height: "80px" }}
+                                                    />
+                                                    <button
+                                                        style={{
+                                                            backgroundColor: "#dc3545",
+                                                            borderColor: "#dc3545",
+                                                        }}
+                                                        type="button"
+                                                        className="btn btn-block btn-danger cross-button mt-1 py-0"
+                                                        onClick={() => handleImagePreviewDelete(img)}
+                                                    >
+                                                        <i className="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {uploadedImages?.length > 0 && (
+                                <div className="uploaded-images my-4">
+                                    <p className="text-success">Product Uploaded Images:</p>
+                                    <div className="row mt-1">
+                                        {uploadedImages?.map((img) => (
+                                            <div className="col-md-3 mt-2">
+                                                <div className="card">
+                                                    <img
+                                                        src={img?.url}
+                                                        alt="Card"
+                                                        className="card-img-top p-2"
+                                                        style={{ width: "100%", height: "80px" }}
+                                                    />
+                                                    <button
+                                                        style={{
+                                                            backgroundColor: "#dc3545",
+                                                            borderColor: "#dc3545",
+                                                        }}
+                                                        className="btn btn-block btn-danger cross-button mt-1 py-0"
+                                                        type="button"
+                                                        disabled={isLoading || isDeleteLoading}
+                                                        onClick={() => deleteImage(img?.public_id)}
+                                                    >
+                                                        <i className="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
 
-              {uploadedImages?.length > 0 && (
-                <div className="uploaded-images my-4">
-                  <p className="text-success">Product Uploaded Images:</p>
-                  <div className="row mt-1">
-                    {uploadedImages?.map((img) => (
-                      <div className="col-md-3 mt-2">
-                        <div className="card">
-                          <img
-                            src={img?.url}
-                            alt="Card"
-                            className="card-img-top p-2"
-                            style={{ width: "100%", height: "80px" }}
-                          />
-                          <button
-                            style={{
-                              backgroundColor: "#dc3545",
-                              borderColor: "#dc3545",
-                            }}
-                            className="btn btn-block btn-danger cross-button mt-1 py-0"
-                            type="button"
+                        <button
+                            id="register_button"
+                            type="submit"
+                            className="btn w-100 py-2"
                             disabled={isLoading || isDeleteLoading}
-                            onClick={() => deleteImage(img?.public_id)}
-                          >
-                            <i className="fa fa-trash"></i>
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                        >
+                            {isLoading ? "Uploading..." : "Upload"}
+                        </button>
+                    </form>
                 </div>
-              )}
             </div>
-
-            <button
-              id="register_button"
-              type="submit"
-              className="btn w-100 py-2"
-              disabled={isLoading || isDeleteLoading}
-            >
-              {isLoading ? "Uploading..." : "Upload"}
-            </button>
-          </form>
-        </div>
-      </div>
-    </AdminLayout>
-  );
+        </AdminLayout>
+    );
 };
 
 export default UploadImages;

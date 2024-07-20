@@ -27,7 +27,6 @@ export const upload_file = (file, folder) => {
     })
 };
 
-
 export const delete_file = async (file) => {
     const res = await cloudinary.uploader.destroy(file)
 

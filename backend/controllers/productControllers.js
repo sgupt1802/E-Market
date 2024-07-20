@@ -108,17 +108,22 @@ export const deleteProductImage = catchAsyncErrors(async (req, res) => {
 // Delete Product => api/v1/products/:id
 export const deleteProduct = catchAsyncErrors(async (req, res) => {
     const product = await Product.findById(req?.params?.id);
-
+  
     if (!product) {
-        return next(new ErrorHandler("Product not found", 404));
+      return next(new ErrorHandler("Product not found", 404));
     }
-
+  
+    // Deleting image associated with product
+    for (let i = 0; i < product?.images?.length; i++) {
+      await delete_file(product?.images[i].public_id);
+    }
+  
     await product.deleteOne();
-
+  
     res.status(200).json({
-        message: "Product Deleted successfully",
-    })
-});
+      message: "Product Deleted",
+    });
+  });
 
 
 // Create/Update Product review => api/v1/review
@@ -205,19 +210,21 @@ export const deleteReview = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Can user review => api/v1/can_review
+// Can user review   =>  /api/v1/can_review
 export const canUserReview = catchAsyncErrors(async (req, res) => {
     const orders = await Order.find({
-        user: req.user._id,
-        "orderItems.product": req.query.productId,
-
-    })
-
+      user: req.user._id,
+      "orderItems.product": req.query.productId,
+    });
+  
     if (orders.length === 0) {
-        return res.status(200).json({ canReview: false })
+      return res.status(200).json({ canReview: false });
     }
-
-    res.status(200).json({ canReview: true })
-});
+  
+    res.status(200).json({
+      canReview: true,
+    });
+  });
 
 // Get products - ADMIN   =>  /api/v1/admin/products
 export const getAdminProducts = catchAsyncErrors(async (req, res, next) => {

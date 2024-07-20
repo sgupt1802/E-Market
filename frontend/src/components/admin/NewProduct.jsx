@@ -102,20 +102,25 @@ const NewProduct = () => {
             </div>
           </div>
           <div className="row">
-            <div className="mb-3 col">
-              <label htmlFor="category_field" className="form-label"> Category </label>
-              <select 
-              className="form-select" 
-              id="category_field" 
-              name="category"
-              value={category}
-              onChange={onChange}
-              >
-                {PRODUCT_CATEGORIES?.map((category) => (
-                    <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-            </div>
+          <div className="mb-3 col">
+                <label htmlFor="category_field" className="form-label">
+                  {" "}
+                  Category{" "}
+                </label>
+                <select
+                  className="form-select"
+                  id="category_field"
+                  name="category"
+                  value={category}
+                  onChange={onChange}
+                >
+                  {PRODUCT_CATEGORIES?.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
             <div className="mb-3 col">
               <label htmlFor="seller_field" className="form-label"> Seller Name </label>
               <input
