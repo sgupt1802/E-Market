@@ -34,8 +34,6 @@ const UpdateProduct = () => {
                 seller:data?.product?.seller,
             })
         }
-
-
         if (error) {
           toast.error(error?.data?.message)
         }

@@ -4,7 +4,7 @@ import ProtectedRoute from "../auth/ProtectedRoute";
 import Dashboard from '../admin/Dashboard';
 import ListProducts from '../admin/ListProducts';
 import NewProduct from '../admin/NewProduct';
-import UpdateProduct from '../admin/updateProduct';
+import UpdateProduct from '../admin/UpdateProduct';
 const adminRoutes = () => {
     return (
         <>
