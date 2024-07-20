@@ -1,12 +1,13 @@
 import React, { useState,useEffect } from 'react'
-import { useCreateProductMutation } from '../../redux/api/productsApi'
+import { useUpdateProductMutation,useGetProductDetailsQuery } from '../../redux/api/productsApi'
 import toast from 'react-hot-toast';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from '../layout/AdminLayout';
 import MetaData from "../layout/MetaData"
 import { PRODUCT_CATEGORIES } from '../../constants/constants';
 
-const NewProduct = () => {
+const UpdateProduct = () => {
+    const params=useParams()
     const navigate=useNavigate()
     const [product,setProduct]=useState({
         name:'',
@@ -17,18 +18,32 @@ const NewProduct = () => {
         seller:'',
     })
 
-    const [createProduct,{isLoading,error,isSuccess}]=useCreateProductMutation()
+    const [updateProduct,{isLoading,error,isSuccess}]=useUpdateProductMutation()
+    const {name,description,price,category,stock,seller}=product
+    const {data}=useGetProductDetailsQuery(params?.id)
+
     useEffect(() => {
+
+        if(data?.product){
+            setProduct({
+                name:data?.product?.name,
+                description:data?.product?.description,
+                price:data?.product?.price,
+                category:data?.product?.category,
+                stock:data?.product?.stock,
+                seller:data?.product?.seller,
+            })
+        }
+
+
         if (error) {
           toast.error(error?.data?.message)
         }
         if(isSuccess){
-            toast.success("Product Created")
+            toast.success("Product Updated")
             navigate('/admin/products')
         }
-      }, [error,isSuccess]); 
-
-    const {name,description,price,category,stock,seller}=product
+      }, [error,isSuccess,data]); 
 
     const onChange = (e) => {
         setProduct({ ...product, [e.target.name]: e.target.value });
@@ -37,7 +52,7 @@ const NewProduct = () => {
     const submitHandler=(e)=>{
         e.preventDefault()
 
-        createProduct(product)
+        updateProduct({id:params?.id, body:product})
 
     }
 
@@ -45,11 +60,11 @@ const NewProduct = () => {
 
   return (
     <AdminLayout>
-        <MetaData title={"Create New Product"}/>
+        <MetaData title={"Update Product"}/>
         <div className="row wrapper">
       <div className="col-10 col-lg-10 mt-5 mt-lg-0">
         <form className="shadow rounded bg-body" onSubmit={submitHandler}>
-          <h2 className="mb-4">New Product</h2>
+          <h2 className="mb-4">Update Product</h2>
           <div className="mb-3">
             <label htmlFor="name_field" className="form-label"> Name </label>
             <input
@@ -85,7 +100,7 @@ const NewProduct = () => {
                 className="form-control"
                 name="price"
                 value={price}
-              onChange={onChange}
+                onChange={onChange}
               />
             </div>
 
@@ -129,7 +144,7 @@ const NewProduct = () => {
             </div>
           </div>
           <button type="submit" className="btn w-100 py-2" disabled={isLoading}>
-            {isLoading ? "Creating..." : "CREATE"}
+            {isLoading ? "Updating..." : "UPDATE"}
             </button>
         </form>
       </div>
@@ -139,4 +154,4 @@ const NewProduct = () => {
   )
 }
 
-export default NewProduct
+export default UpdateProduct
