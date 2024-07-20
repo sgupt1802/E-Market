@@ -74,15 +74,24 @@ export const updateOrders = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('You have already delivered this order'), 400)
     }
 
-    // Update product stock
-    order?.orderItems?.forEach(async (item) => {
-        const product = await Product.findById(item?.product?.toString());
-        if (!product) {
-            return next(new ErrorHandler("No Product found with this ID", 404));
-        }
-        product.stock = product.stock - item.quantity;
-        await product.save({ validateBeforeSave: false });
-    });
+    
+let productNotFound = false;
+// Update products stock
+  for (const item of order.orderItems) {
+    const product = await Product.findById(item?.product?.toString());
+    if (!product) {
+      productNotFound = true;
+      break;
+    }
+    product.stock = product.stock - item.quantity;
+    await product.save({ validateBeforeSave: false });
+  }
+
+  if (productNotFound) {
+    return next(
+      new ErrorHandler("No Product found with one or more IDs.", 404)
+    );
+  }
 
     order.orderStatus = req.body.status;
     order.deliveredAt = Date.now();
