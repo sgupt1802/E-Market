@@ -59,7 +59,7 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 
 // Upload user avatar   =>  /api/v1/me/upload_avatar
 export const uploadAvatar = catchAsyncErrors(async (req, res, next) => {
-    const avatarResponse = await upload_file(req.body.avatar, 'ShopIT-v2/Avatars')
+    const avatarResponse = await upload_file(req.body.avatar, 'emarket/Avatars')
     //remove previous avatar
     if (req?.user?.avatar?.url) {
         await del_file(req?.user?.avatar?.public_id)
