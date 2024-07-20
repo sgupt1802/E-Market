@@ -1,37 +1,63 @@
-import React, { useEffect } from 'react'
-import { Link } from "react-router-dom";
-import MetaData from "../layout/MetaData"
-import { useOrderDetailsQuery } from '../../redux/api/orderApi'
-import { useParams } from 'react-router-dom'
-import toast from 'react-hot-toast';
-import Loader from "../layout/Loader"
+import React, { useEffect, useState } from "react";
+import Loader from "../layout/Loader";
+import { toast } from "react-hot-toast";
+import { Link, useParams } from "react-router-dom";
+import MetaData from "../layout/MetaData";
+import {
+    useOrderDetailsQuery,
+    useUpdateOrderMutation,
+  } from "../../redux/api/orderApi";
+import AdminLayout from "../layout/AdminLayout";
 
-const OrderDetails = () => {
-    const params=useParams()
-    const {data, isLoading, error}=useOrderDetailsQuery(params?.id)
-    const order=data?.order || {}
-    const {shippingInfo,orderItems,paymentInfo,user,totalAmount,orderStatus}=order
-      const isPaid = paymentInfo?.status === "paid" ? true : false;
+
+const ProcessOrder = () => {
+
+    const [status, setStatus] = useState("");
+
+    const params = useParams();
+    const { data } = useOrderDetailsQuery(params?.id);
+    const order = data?.order || {};
+  
+    const [updateOrder, { error, isSuccess }] = useUpdateOrderMutation();
+  
+    const {
+      shippingInfo,
+      orderItems,
+      paymentInfo,
+      user,
+      totalAmount,
+      orderStatus,
+    } = order;
+  
+    const isPaid = paymentInfo?.status === "paid" ? true : false;
+  
     useEffect(() => {
-        if (error) {
-          toast.error(error?.data?.message)
-        }
-      }, [error]); 
+      if (orderStatus) {
+        setStatus(orderStatus);
+      }
+    }, [orderStatus]);
+  
+    useEffect(() => {
+      if (error) {
+        toast.error(error?.data?.message);
+      }
+  
+      if (isSuccess) {
+        toast.success("Order updated");
+      }
+    }, [error, isSuccess]);
 
-      if(isLoading) return <Loader/>;
-      const orderLink=`/invoice/order/${order?._id}`
-
+    const updateOrderHandler = (id) => {
+        const data = { status };
+        updateOrder({ id, body: data });
+    };
   return (
-    <>
-    <MetaData title={"Order Details"}/>
-    <div className="row d-flex justify-content-center">
-      <div className="col-12 col-lg-9 mt-5 order-details">
-        <div className="d-flex justify-content-between align-items-center">
-          <h3 className="mt-5 mb-4">Your Order Details</h3>
-          <a className="btn btn-success" href={orderLink}>
-            <i className="fa fa-print"></i> Invoice
-          </a>
-        </div>
+    <AdminLayout>
+        <MetaData title={"Process Order"} />
+        <div className="row d-flex justify-content-around">
+      <div className="col-12 col-lg-8 order-details">
+        <h3 className="mt-5 mb-4">Order Details</h3>
+
         <table className="table table-striped table-bordered">
           <tbody>
             <tr>
@@ -39,8 +65,8 @@ const OrderDetails = () => {
               <td>{order?._id}</td>
             </tr>
             <tr>
-                <th scope="row">Status</th>
-                <td
+              <th scope="row">Order Status</th>
+              <td
                   className={
                     String(orderStatus).includes("Delivered")
                       ? "greenColor"
@@ -49,17 +75,13 @@ const OrderDetails = () => {
                 >
                   <b>{orderStatus}</b>
                 </td>
-              </tr>
-              <tr>
-                <th scope="row">Date</th>
-                <td>{new Date(order?.createdAt).toLocaleString("en-IN")}</td>
-              </tr>
+            </tr>
           </tbody>
         </table>
 
         <h3 className="mt-5 mb-4">Shipping Info</h3>
         <table className="table table-striped table-bordered">
-          <tbody>
+        <tbody>
             <tr>
             <th scope="row">Name</th>
             <td>{user?.name}</td>
@@ -80,7 +102,7 @@ const OrderDetails = () => {
 
         <h3 className="mt-5 mb-4">Payment Info</h3>
         <table className="table table-striped table-bordered">
-          <tbody>
+        <tbody>
           <tr>
                 <th scope="row">Status</th>
                 <td className={isPaid ? "greenColor" : "redColor"}>
@@ -96,7 +118,7 @@ const OrderDetails = () => {
               <td>{paymentInfo?.id || "Nil"}</td>
             </tr>
             <tr>
-              <th scope="row">Amount Paid</th>
+              <th scope="row">Amount</th>
               <td>{totalAmount}</td>
             </tr>
           </tbody>
@@ -106,7 +128,7 @@ const OrderDetails = () => {
 
         <hr />
         <div className="cart-item my-1">
-            {orderItems?.map((item) => (
+        {orderItems?.map((item) => (
               <div className="row my-5">
                 <div className="col-4 col-lg-2">
                   <img
@@ -130,14 +152,31 @@ const OrderDetails = () => {
                 </div>
               </div>
             ))}
-          </div>
-        
+        </div>
         <hr />
       </div>
-    </div>
 
-    </>
+      <div className="col-12 col-lg-3 mt-5">
+        <h4 className="my-4">Status</h4>
+
+        <div className="mb-3">
+          <select className="form-select" name="status" value={status} onChange={(e)=>setStatus(e.target.value)}>
+            <option value="Processing">Processing</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+          </select>
+        </div>
+
+        <button className="btn btn-primary w-100" onClick={()=>updateOrderHandler(order?._id)}>Update Status</button>
+
+        <h4 className="mt-5 mb-3">Order Invoice</h4>
+        <Link to={`/invoice/order/${order?._id}`} className="btn btn-success w-100">
+          <i className="fa fa-print"></i> Generate Invoice
+        </Link>
+      </div>
+    </div>
+    </AdminLayout>
   )
 }
 
-export default OrderDetails
+export default ProcessOrder
