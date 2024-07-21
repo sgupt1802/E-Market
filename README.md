@@ -2,6 +2,10 @@
 
 Welcome to **E-Market**, your one-stop solution for all your e-commerce needs. Whether you're a customer looking to purchase products or a wholesaler/retailer wanting to take your business online, E-Market has got you covered.
 
+### Note 📝
+
+**E-Market** is my FS project to showcase the integration and functionality of both backend and frontend technologies. This project is designed to illustrate how different technologies work together to create a fully functional online marketplace.
+
 ## Features ✨
 
 ### Authentication 🔐
@@ -34,6 +38,10 @@ Welcome to **E-Market**, your one-stop solution for all your e-commerce needs. W
 ### Wholesale Features 🏷️
 - **Product Listing:** Wholesalers can enter product details, including price and taxes, and list them on the website.
 - **Order Management:** Wholesalers can track the orders they receive and view sales data through charts.
+
+## Responsiveness 🌐
+
+**E-Market** is currently optimized for desktop use, showcasing a robust and fully functional design for larger screens. Future updates will focus on enhancing responsiveness across various devices.
 
 ## Getting Started 🚀
 
@@ -71,9 +79,9 @@ To get a local copy up and running, follow these steps:
     npm start
     ```
 
-### Demo 🎥
+### Demo 📍
 
-Check out the live demo of the website [here](https://your-demo-link.com).
+Check out the live demo of the website [here](https://e-market-oe09.onrender.com/).
 
 ## Contributing 🤝
 
