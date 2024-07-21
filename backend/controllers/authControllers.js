@@ -5,7 +5,7 @@ import ErrorHandler from "../utils/errorHandler.js";
 import sendToken from "../utils/sendToken.js";
 import sendEmail from "../utils/sendEmails.js";
 import crypto from "crypto";
-import { upload_file } from '../utils/cloudinary.js'
+import { upload_file,delete_file } from '../utils/cloudinary.js'
 
 // Register user   =>  /api/v1/register
 export const registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -228,6 +228,10 @@ export const deleteUser = catchAsyncErrors(async (req, res, next) => {
     }
 
     // TODO - Remove user avatar from cloudinary
+    if (user?.avatar?.public_id) {
+        await delete_file(user?.avatar?.public_id);
+      }
+    
 
     await user.deleteOne();
 
