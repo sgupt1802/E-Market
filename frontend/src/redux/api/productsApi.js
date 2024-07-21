@@ -33,7 +33,7 @@ export const productApi = createApi({
       invalidatesTags: ['Product']
     }),
     canUserReview: builder.query({
-      query: (productId) => `/can_review/productId=${productId}`,
+      query: (productId) => `/can_review/?productId=${productId}`,
     }),
     getAdminProducts: builder.query({
       query: () => `/admin/products`,
