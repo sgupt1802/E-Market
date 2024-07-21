@@ -137,9 +137,6 @@ export const stripeWebhook = catchAsyncErrors(
 
 
         } catch (error) {
-            console.log("===============================================")
             console.log("Error=> ", error);
-            console.log("===============================================")
-
         }
     })

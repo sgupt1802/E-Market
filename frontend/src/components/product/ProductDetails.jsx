@@ -9,6 +9,7 @@ import { setCartItem } from "../../redux/features/cartSlice"
 import MetaData from "../layout/MetaData";
 import NewReview from "../reviews/NewReview";
 import ListReviews from "../reviews/ListReviews";
+import NotFound from "../layout/NotFound";
 
 
 const ProductDetails = () => {
@@ -37,7 +38,7 @@ const ProductDetails = () => {
 
     useEffect(() => {
         if (isError) {
-            toast.error(error?.data?.message);
+            // toast.error(error?.data?.message);
         }
     }, [isError]);
 
@@ -76,6 +77,11 @@ const ProductDetails = () => {
     }
 
     if (isLoading) return <Loader />;
+
+    if (error && error?.status == 404) {
+        return <NotFound />
+    }
+
 
     return (
         <>
@@ -147,7 +153,7 @@ const ProductDetails = () => {
                         type="button"
                         id="cart_btn"
                         className="btn btn-primary d-inline ms-4"
-                        disabled={product.stock <= 0}
+                        disabled={product?.stock <= 0}
                         onClick={setItemToCart}
                     >
                         Add to Cart
@@ -174,7 +180,7 @@ const ProductDetails = () => {
                         Sold by: <strong>{product?.seller}</strong>
                     </p>
 
-                    {isAuthenticated ? (<NewReview productId={product?._id}/>) : (
+                    {isAuthenticated ? (<NewReview productId={product?._id} />) : (
                         <div className="alert alert-danger my-5" type="alert">
                             Login to post your review.
                         </div>
@@ -183,7 +189,7 @@ const ProductDetails = () => {
 
                 </div>
             </div>
-            {product?.reviews?.length>0 && <ListReviews reviews={product?.reviews}/>}
+            {product?.reviews?.length > 0 && <ListReviews reviews={product?.reviews} />}
         </>
     );
 };

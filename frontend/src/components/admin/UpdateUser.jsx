@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Loader from "../layout/Loader";
 import { toast } from "react-hot-toast";
 import {
     useGetUserDetailsQuery,
