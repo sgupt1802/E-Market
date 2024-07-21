@@ -39,6 +39,9 @@ const ProductReviews = () => {
         getProductReviews(productId);
     };
 
+    const deleteReviewHandler = (id) => {
+        deleteReview({ productId, id });
+    };
 
     const setReviews = () => {
         const reviews = {
@@ -82,8 +85,8 @@ const ProductReviews = () => {
                     <>
                         <button
                             className="btn btn-outline-danger ms-2"
-                        //   onClick={() => deleteReviewHandler(review?._id)}
-                        //   disabled={isDeleteLoading}
+                            onClick={() => deleteReviewHandler(review?._id)}
+                            disabled={isDeleteLoading}
                         >
                             <i className="fa fa-trash"></i>
                         </button>
@@ -136,7 +139,7 @@ const ProductReviews = () => {
                     hover
                 />
             ) : (
-                <p className="mt-5 text-center">No Reviews</p>
+                <p className="mt-5 text-center">No Reviews yet</p>
             )}
         </AdminLayout>
     )
