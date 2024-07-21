@@ -39,6 +39,31 @@ Welcome to **E-Market**, your one-stop solution for all your e-commerce needs. W
 - **Product Listing:** Wholesalers can enter product details, including price and taxes, and list them on the website.
 - **Order Management:** Wholesalers can track the orders they receive and view sales data through charts.
 
+## Screenshots 📸
+
+### Homepage
+![Homepage](screenshots/FrontPanel.png)
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/adminDashboard.png)
+
+### Admin Products
+![Admin Products](screenshots/AdminOrders.png)
+
+### Users
+![Users](screenshots/users.png)
+
+### Profile
+![Profile](screenshots/profile.png)
+
+### Cart
+![Cart](screenshots/cart.png)
+
+### Checkout
+![Checkout](screenshots/checkouts.png)
+
+
+
 ## Responsiveness 🌐
 
 **E-Market** is currently optimized for desktop use, showcasing a robust and fully functional design for larger screens. Future updates will focus on enhancing responsiveness across various devices.
