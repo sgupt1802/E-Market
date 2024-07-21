@@ -1,6 +1,7 @@
 /node_modules/
 /frontend/node_modules/
 backend/config
+backend/seeder
 /frontend/.env.local
 /frontend/.env.development.local
 /frontend/.env.test.local
