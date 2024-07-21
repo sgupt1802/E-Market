@@ -22,6 +22,7 @@ const ForgotPassword = () => {
 
         if (isSuccess) {
             toast.success("Email sent. Please check your inbox.")
+            navigate('/login')
         }
     }, [error, isAuthenticated, isSuccess]);
 

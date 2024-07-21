@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { Link } from "react-router-dom";
 import MetaData from "../layout/MetaData"
 import { useOrderDetailsQuery } from '../../redux/api/orderApi'
 import { useParams } from 'react-router-dom'
@@ -61,7 +60,7 @@ const Invoice = () => {
                             </div>
                             <div>(+91)-6006150543</div>
                             <div>
-                                <a href="mailto:info@shopit.com">info@e-market.com</a>
+                                <a href="mailto:info@emarket.com">info@e-market.com</a>
                             </div>
                         </div>
                         <div id="project">
