@@ -1,10 +1,10 @@
-# E-Market 🛒
+# E-Market 🛒  [GO](https://e-market-oe09.onrender.com/) 📌
 
 Welcome to **E-Market**, your one-stop solution for all your e-commerce needs. Whether you're a customer looking to purchase products or a wholesaler/retailer wanting to take your business online, E-Market has got you covered.
 
 ### Note 📝
 
-**E-Market** is my FS project to showcase the integration and functionality of both backend and frontend technologies. This project is designed to illustrate how different technologies work together to create a fully functional online marketplace.
+**E-Market** is my FS project deployed on render to showcase the integration and functionality of both backend and frontend technologies.
 
 ## Features ✨
 
